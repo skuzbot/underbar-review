@@ -220,13 +220,46 @@
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
-    
+    if(collection.length === 0)
+      return true;
+
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+
+    var wasFound = iterator(collection[0]);
+    return _.reduce(collection, function(wasFound, item) {
+      if (!!iterator(item) != wasFound) {
+        return false;
+      }
+      return true;
+    }, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
+    if (!collection.length) {
+      return false;
+    }
+    if (iterator === undefined) {
+      iterator = _.identity;
+    }
+
+    return !_.every(collection, function(value) {
+      return !iterator(value)
+    }
+    )
+
+    
+//     return _.reduce(collection, function(wasFound, item) {
+//       if (wasFound || iterator(item) === true) {
+//         wasFound = true;
+//       }
+//       return wasFound;
+//     }, true)
+
   };
 
 
